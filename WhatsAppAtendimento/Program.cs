@@ -12,6 +12,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.MapGet("/", () =>
+{
+    return Results.Ok("Hello, World!");
+})
+.WithName("GetWeatherForecast");
 app.MapPost("/webhook", async (HttpRequest req) =>
 {
     return Results.Ok();
