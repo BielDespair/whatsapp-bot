@@ -33,8 +33,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-
+else
+{
+    app.UseHttpsRedirection();
+}
+    
 
 
 app.MapGet("/webhook", (HttpRequest req) =>
@@ -51,6 +54,7 @@ app.MapGet("/webhook", (HttpRequest req) =>
 
 app.MapPost("/webhook", (WebhookPayload payload, MessageBuffer messageBuffer) =>
 {
+
     foreach (var entry in payload.Entry ?? [])
         foreach (var change in entry.Changes ?? [])
         {
@@ -75,7 +79,7 @@ app.MapPost("/webhook", (WebhookPayload payload, MessageBuffer messageBuffer) =>
                     Console.WriteLine($"[mensagem] {msg}");
                     // → insert em messages, ON CONFLICT (tenant_id, wam_id) DO NOTHING
                     //   (o insert retornar 0 linhas = reenvio da Meta, pule o buffer)
-                    messageBuffer.Add(new ConversationId(msg.TenantId, msg.UserId), msg.Text ?? $"<{msg.Type}>");
+                    //messageBuffer.Add(new ConversationId(msg.TenantId, msg.UserId), msg.Text ?? $"<{msg.Type}>");
                 }
             }
 

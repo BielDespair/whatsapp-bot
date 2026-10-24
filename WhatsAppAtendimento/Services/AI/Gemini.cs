@@ -26,13 +26,15 @@ namespace WhatsAppAtendimento.Services.AI
                 throw new ArgumentException("API key required");
             if (string.IsNullOrEmpty(config.ApiUrl)) 
                 throw new ArgumentException("API url required");
+            if (string.IsNullOrEmpty(config.Model))
+                throw new ArgumentException("Gemini Model required");
 
             string path = Path.Combine(AppContext.BaseDirectory, config.SystemInstructionsPath);
             if (!File.Exists(path))
                 throw new FileNotFoundException($"System instruction não encontrada: {path}", path);
 
             _systemInstructions = File.ReadAllText(config.SystemInstructionsPath);
-            _model = config.Model ?? "models/gemini-3.6-flash";
+            _model = config.Model;
 
             _cache = cache;
             _sessionExpiration = TimeSpan.FromSeconds(config.SessionExpirationSeconds);
